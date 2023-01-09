@@ -10,6 +10,7 @@ import axios from "axios";
 function App() {
 	const requestType = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 	const [request, setRequest] = useState(requestType[0]);
+	const [requestBody, setRequestBody] = useState('')
 	const [url, setUrl] = useState('');
 	const [response, setResponse] = useState('');
 
@@ -18,16 +19,20 @@ function App() {
 	}
 
 	async function sendRequest() {
-		console.log(request, url);
+		console.log(request, url, requestBody);
 		let response
 		switch (request) {
 			case 'GET': {
 				response = await axios.get(url);
 				break;
 			}
-			/*			case 'POST': {
-							response = await axios.post(url);
-						}*/
+			case 'DELETE' : {
+				response = await axios.delete(url);
+				break;
+			}
+			case 'POST': {
+				response = await axios.post(url, requestBody);
+			}
 		}
 		setResponse(response.data);
 		console.log(response.data);
@@ -53,11 +58,20 @@ function App() {
 				/>
 				<Button variant="contained" onClick={sendRequest}>Send</Button>
 			</div>
+			<TextField
+				label="Request Body"
+				id='text-field'
+				value={requestBody}
+				onChange={e => setRequestBody(e.target.value)}
+				multiline
+			></TextField>
 			<div>
-				Configs
+				Response Body
 			</div>
-			<div>
-				{JSON.stringify(response)}
+			<div className="border-4">
+				<pre><code>
+					{JSON.stringify(response, null, 4)}
+				</code></pre>
 			</div>
 		</div>
 	);
