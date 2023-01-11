@@ -1,4 +1,3 @@
-/*
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import {useState} from "react";
@@ -6,14 +5,27 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
+import {useAuth} from "./Auth";
 
-function App() {
+function Main() {
 	const requestType = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 	const [request, setRequest] = useState(requestType[0]);
 	const [requestBody, setRequestBody] = useState('')
 	const [url, setUrl] = useState('');
 	const [response, setResponse] = useState('');
+
+	const auth = useAuth()
+
+	if (!auth.user) {
+		return <Box>
+			<Typography component="h2">
+				Please login
+			</Typography>
+		</Box>
+	}
 
 	function handleSelectChange(event) {
 		setRequest(event.target.value);
@@ -78,40 +90,4 @@ function App() {
 	);
 }
 
-export default App;
-*/
-
-
-import {useAuth} from "./components/Auth";
-import {useEffect} from "react";
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import Login from "./routes/Login";
-import Signup from "./routes/Signup";
-import NavBar from "./components/NavBar";
-import Main from "./components/Main";
-
-const App = () => {
-	const auth = useAuth()
-
-	useEffect(() => {
-		if (!auth?.user) {
-			const data = JSON.parse(localStorage.getItem('user'))
-			if (data) {
-				auth.loginFromLocalStorage(data)
-			}
-		}
-	}, [auth])
-
-	return (
-		<BrowserRouter>
-			<NavBar/>
-			<Routes>
-				<Route path="/" element={<Main/>}/>
-				<Route path="/login" element={<Login/>}/>
-				<Route path="/signup" element={<Signup/>}/>
-			</Routes>
-		</BrowserRouter>
-	);
-}
-
-export default App;
+export default Main;
