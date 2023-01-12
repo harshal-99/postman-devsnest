@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
 import userReducer from "./reducers/userReducer";
-import {requestSlice} from "./reducers/requestReducer";
+import requestReducer from "./reducers/requestReducer";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -14,7 +14,7 @@ const store = configureStore(
 	{
 		reducer: {
 			user: userReducer,
-			request: requestSlice,
+			request: requestReducer,
 		}
 	}
 )
