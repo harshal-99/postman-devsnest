@@ -1,9 +1,10 @@
 import {useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "../components/Auth";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SnackBar from "../components/SnackBar";
+import {useDispatch} from "react-redux";
+import {loginUser} from "../reducers/userReducer";
 
 const Login = () => {
 	const [username, setUsername] = useState('')
@@ -12,16 +13,13 @@ const Login = () => {
 
 	const navigate = useNavigate()
 	const location = useLocation()
-	const auth = useAuth()
+	const dispatch = useDispatch()
 
 	const from = location.state?.from || "/"
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-		const response = await auth.login({username, password}, () => navigate(from, {replace: true}))
-		if (response) {
-			setError(response)
-		}
+		dispatch(loginUser(username, password, () => navigate('/', {replace: true})))
 	}
 
 	return (

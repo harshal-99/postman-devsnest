@@ -1,9 +1,10 @@
 import {useState} from "react";
-import AuthService from "../service/auth.service";
 import {useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SnackBar from "../components/SnackBar";
+import {useDispatch} from "react-redux";
+import {signUpUser} from "../reducers/userReducer";
 
 const Signup = () => {
 	const [username, setUsername] = useState('')
@@ -11,15 +12,10 @@ const Signup = () => {
 	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	const handleFormSubmit = async (event) => {
 		event.preventDefault()
-
-		try {
-			await AuthService.signup({username, password})
-			navigate('/login', {replace: true})
-		} catch (e) {
-			setError(e.response.data.error)
-		}
+		dispatch(signUpUser(username, password, () => navigate('/login', {replace: true})))
 	}
 
 	return (
