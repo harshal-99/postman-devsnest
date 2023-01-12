@@ -1,10 +1,11 @@
 import {useEffect} from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {useDispatch, useSelector} from "react-redux";
+
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
-import {useDispatch, useSelector} from "react-redux";
 import {loginFromLocalStorage, selectUser} from "./reducers/userReducer";
 import {initializeRequests} from "./reducers/requestReducer";
 

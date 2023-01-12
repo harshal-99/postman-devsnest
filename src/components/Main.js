@@ -8,8 +8,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import HeaderInput from "./HeaderInput";
 import {useSelector} from "react-redux";
+
+import HeaderInput from "./HeaderInput";
 import {selectUser} from "../reducers/userReducer";
 
 function Main() {

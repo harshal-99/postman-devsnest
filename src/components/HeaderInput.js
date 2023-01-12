@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import {Checkbox} from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
 
 const HeaderInput = ({checked, keyValue, value, setVal}) => {
 	const handleChange = (key, newValue) => {
