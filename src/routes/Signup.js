@@ -2,14 +2,12 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import SnackBar from "../components/SnackBar";
 import {useDispatch} from "react-redux";
 import {signUpUser} from "../reducers/userReducer";
 
 const Signup = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [error, setError] = useState(null)
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -25,7 +23,6 @@ const Signup = () => {
 			<TextField label="Password" variant="outlined" id="password" type="password" value={password}
 			           onChange={event => setPassword(event.target.value)}/>
 			<Button variant="contained" type="submit">Signup</Button>
-			{error && <SnackBar message={error}/>}
 		</form>
 	)
 }
