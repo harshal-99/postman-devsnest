@@ -36,7 +36,7 @@ export const requestSlice = createSlice({
 		},
 		addNewRequest(state, action) {
 			const newRequest = action.payload
-			if (!state.requestIds.indexOf(newRequest.id)) {
+			if (state.requestIds.indexOf(newRequest.id) === -1) {
 				state.requestIds.push(newRequest.id)
 				state.requests.push(newRequest)
 			}
@@ -49,8 +49,8 @@ export const requestSlice = createSlice({
 			}
 		},
 		deleteRequest(state, action) {
-			delete state.requests[action.payload.id]
-			state.requestIds = state.requestIds.filter(id => id !== action.payload.id)
+			state.requests = state.requests.filter(request => request.id !== action.payload)
+			state.requestIds = state.requestIds.filter(id => id !== action.payload)
 		},
 		updateHeader(state, action) {
 			const savedRequest = action.payload
@@ -78,7 +78,7 @@ export const createNewRequest = (request, user) => {
 	return async (dispatch) => {
 		try {
 			const newRequest = await requestService.addNewRequest(request, user)
-			dispatch(updateRequest(newRequest))
+			dispatch(addNewRequest(newRequest))
 		} catch (e) {
 			console.log(e)
 		}
