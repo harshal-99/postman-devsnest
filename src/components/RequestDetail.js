@@ -17,6 +17,7 @@ const RequestDetail = () => {
 	const location = useLocation();
 	const requestId = location.pathname.split('/').pop()
 	const [request, setRequest] = useState(useSelector(state => selectRequestById(state, requestId)))
+	const [response, setResponse] = useState(null)
 	const requestType = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 	const dispatch = useDispatch()
 
@@ -38,7 +39,7 @@ const RequestDetail = () => {
 
 		dispatch(saveRequest(request, user))
 
-		let response = ''
+		let response = null
 		switch (request.type) {
 			case 'GET': {
 				response = await axios.get(request.url, configs);
@@ -50,17 +51,16 @@ const RequestDetail = () => {
 			}
 			case 'POST': {
 				let parsedStr
-
 				parsedStr = JSON.parse(`${request.body}`);
+				response = await axios.post(request.url, parsedStr, configs);
 				break;
 			}
 			default: {
 				console.log('default')
 			}
 		}
-
+		setResponse(response)
 	}
-
 
 
 	return (
@@ -93,20 +93,21 @@ const RequestDetail = () => {
 
 			</Box>
 			<Box className="mt-5">
-				{/*				<TextField
+				<TextField
 					label="Request Body"
 					id='text-field'
-					value={requestBody}
-					onChange={e => setRequestBody(e.target.value)}
+					value={request.body}
+					onChange={e => handleChange('body', e.target.value)}
 					multiline
-				></TextField>*/}
+				></TextField>
 			</Box>
 			<div className="mt-5">
 				Response Body
 			</div>
+			<div>Status Code {response.status}</div>
 			<div className="border-4 mt-5">
 				<pre><code>
-				{/*	{JSON.stringify(response, null, 4)}*/}
+					{JSON.stringify(response, null, 4)}
 				</code></pre>
 			</div>
 		</div>
