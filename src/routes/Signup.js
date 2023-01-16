@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import {useDispatch} from "react-redux";
 
 import {signUpUser} from "../reducers/userReducer";
+import NavBar from "../components/NavBar";
 
 const Signup = () => {
 	const [username, setUsername] = useState('')
@@ -18,13 +19,16 @@ const Signup = () => {
 	}
 
 	return (
-		<form onSubmit={handleFormSubmit}>
-			<TextField label="Username" variant="outlined" id="username" type="text" value={username}
-			           onChange={event => setUsername(event.target.value)}/>
-			<TextField label="Password" variant="outlined" id="password" type="password" value={password}
-			           onChange={event => setPassword(event.target.value)}/>
-			<Button variant="contained" type="submit">Signup</Button>
-		</form>
+		<>
+			<NavBar/>
+			<form className="mt-1.5" onSubmit={handleFormSubmit}>
+				<TextField label="Username" variant="outlined" id="username" type="text" value={username}
+				           onChange={event => setUsername(event.target.value)}/>
+				<TextField label="Password" variant="outlined" id="password" type="password" value={password}
+				           onChange={event => setPassword(event.target.value)}/>
+				<Button variant="contained" type="submit">Signup</Button>
+			</form>
+		</>
 	)
 }
 

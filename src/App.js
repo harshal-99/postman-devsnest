@@ -1,33 +1,30 @@
 import {useEffect} from "react";
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import {useDispatch, useSelector} from "react-redux";
+import {Outlet} from 'react-router-dom'
+import {useDispatch} from "react-redux";
 
-import Login from "./routes/Login";
-import Signup from "./routes/Signup";
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
-import {loginFromLocalStorage, selectUser} from "./reducers/userReducer";
-import {initializeRequests} from "./reducers/requestReducer";
+import {loginFromLocalStorage} from "./reducers/userReducer";
 
 const App = () => {
 	const dispatch = useDispatch()
-	const user = useSelector(selectUser)
+
 
 	useEffect(() => {
 		dispatch(loginFromLocalStorage())
-		dispatch(initializeRequests(user))
 	}, [dispatch])
 
 
 	return (
-		<BrowserRouter>
+		<>
 			<NavBar/>
-			<Routes>
-				<Route path="/" element={<Main/>}/>
-				<Route path="/login" element={<Login/>}/>
-				<Route path="/signup" element={<Signup/>}/>
-			</Routes>
-		</BrowserRouter>
+			<div className="flex">
+				<Main/>
+				<div className="w-3/5">
+					<Outlet/>
+				</div>
+			</div>
+		</>
 	);
 }
 
