@@ -41,8 +41,8 @@ const getRequestById = async (requestId, user) => {
 	return response.data
 }
 
-const deleteRequest = async (request, user) => {
-	const response = await axios.delete(REACT_APP_BACKEND_URL + '/api/request/' + request.id, {
+const deleteRequest = async (requestId, user) => {
+	const response = await axios.delete(REACT_APP_BACKEND_URL + '/api/request/' + requestId, {
 		headers: {
 			Authorization: `Bearer ${user.token}`
 		}
