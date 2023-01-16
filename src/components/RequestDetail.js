@@ -59,7 +59,13 @@ const RequestDetail = () => {
 				console.log('default')
 			}
 		}
+		let responseHeaders = []
+		for (let key in response.headers) {
+			responseHeaders.push([key, response.headers[key]])
+		}
+		response.headers = responseHeaders
 		setResponse(response)
+		console.log(response.headers)
 	}
 
 
@@ -101,15 +107,33 @@ const RequestDetail = () => {
 					multiline
 				></TextField>
 			</Box>
-			<div className="mt-5">
-				Response Body
-			</div>
-			<div>Status Code {response.status}</div>
-			<div className="border-4 mt-5">
-				<pre><code>
-					{JSON.stringify(response, null, 4)}
-				</code></pre>
-			</div>
+			{response &&
+				<>
+					<div className="mt-5">
+						Response Body
+					</div>
+					<div>Status Code {response.status}</div>
+					<div className="grid grid-cols-2 w-72">
+						<div className="border border-black">Key</div>
+						<div className="border border-black">Value</div>
+						{response.headers.map(val => {
+							return (
+								<>
+									<div className="border border-black" key={val[0]}>{val[0]}</div>
+									<div className="border border-black" key={val[1]}>{val[1]}</div>
+								</>
+							)
+						})}
+					</div>
+					<div className="border-4 mt-5">
+						<pre>
+						<code>
+							{JSON.stringify(response.data, null, 4)}
+						</code>
+						</pre>
+					</div>
+				</>
+			}
 		</div>
 	)
 }
