@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit"
 import userService from "../service/user.service";
+import requestService from "../service/request.service";
 
 const initialState = {
 	user: null,
@@ -49,7 +50,8 @@ export const loginFromLocalStorage = () => {
 		const savedUser = window.localStorage.getItem('user')
 		if (!savedUser) return
 		const user = JSON.parse(savedUser)
-		if (user) {
+		const validUser = await userService.isTokenValid(user.token)
+		if (validUser) {
 			dispatch(setUser(user))
 		}
 	}
