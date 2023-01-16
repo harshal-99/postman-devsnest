@@ -78,7 +78,7 @@ export const createNewRequest = (request, user) => {
 	return async (dispatch) => {
 		try {
 			const newRequest = await requestService.addNewRequest(request, user)
-			dispatch(addNewRequest(newRequest))
+			dispatch(updateRequest(newRequest))
 		} catch (e) {
 			console.log(e)
 		}
