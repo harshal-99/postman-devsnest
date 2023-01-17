@@ -1,9 +1,9 @@
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import {useLocation} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {saveRequest, selectRequestById} from "../reducers/requestReducer";
+import {saveRequest, selectRequestById, updateRequest} from "../reducers/requestReducer";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -14,19 +14,16 @@ import {selectUser} from "../reducers/userReducer";
 
 const RequestDetail = () => {
 	const {user} = useSelector(selectUser)
-	const location = useLocation();
-	const requestId = location.pathname.split('/').pop()
-	const [request, setRequest] = useState(useSelector(state => selectRequestById(state, requestId)))
+	const {requestId} = useParams()
+	const request = useSelector(state => selectRequestById(state, requestId));
 	const [response, setResponse] = useState(null)
 	const requestType = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 	const dispatch = useDispatch()
 
 	function handleChange(key, value) {
-		setRequest(prev => {
-			const newValue = {...prev}
-			newValue[key] = value
-			return newValue
-		});
+		const newRequest = {...request}
+		newRequest[key] = value
+		dispatch(updateRequest(newRequest))
 	}
 
 	async function sendRequest() {
@@ -68,6 +65,9 @@ const RequestDetail = () => {
 		console.log(response.headers)
 	}
 
+	if (!request) {
+		return <div>Loading...</div>
+	}
 
 	return (
 		<div className="flex flex-col justify-center items-center">

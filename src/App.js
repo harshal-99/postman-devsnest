@@ -14,7 +14,6 @@ const App = () => {
 		dispatch(loginFromLocalStorage())
 	}, [dispatch])
 
-
 	return (
 		<>
 			<NavBar/>
@@ -29,3 +28,4 @@ const App = () => {
 }
 
 export default App;
+
