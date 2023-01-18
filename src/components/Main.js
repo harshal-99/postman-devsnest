@@ -1,5 +1,3 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import {useSelector} from "react-redux";
 
 import {selectUser} from "../reducers/userReducer";
@@ -9,11 +7,11 @@ function Main() {
 	const {user} = useSelector(selectUser)
 
 	if (!user) {
-		return <Box>
-			<Typography component="h2">
+		return <div>
+			<h2>
 				Please login
-			</Typography>
-		</Box>
+			</h2>
+		</div>
 	}
 
 	return (

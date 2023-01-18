@@ -1,7 +1,5 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import {useDispatch} from "react-redux";
 
 import {signUpUser} from "../reducers/userReducer";
@@ -22,11 +20,13 @@ const Signup = () => {
 		<>
 			<NavBar/>
 			<form className="mt-1.5" onSubmit={handleFormSubmit}>
-				<TextField label="Username" variant="outlined" id="username" type="text" value={username}
-				           onChange={event => setUsername(event.target.value)}/>
-				<TextField label="Password" variant="outlined" id="password" type="password" value={password}
-				           onChange={event => setPassword(event.target.value)}/>
-				<Button variant="contained" type="submit">Signup</Button>
+				<input id="username" type="text" value={username}
+				       className="border-2 border-black" placeholder="Username"
+				       onChange={event => setUsername(event.target.value)}/>
+				<input id="password" type="password" value={password}
+				       className="border-2 border-black" placeholder="Password"
+				       onChange={event => setPassword(event.target.value)}/>
+				<button type="submit">Signup</button>
 			</form>
 		</>
 	)

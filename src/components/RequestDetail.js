@@ -1,13 +1,7 @@
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import {useParams} from "react-router-dom";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {saveRequest, selectRequestById, updateRequest} from "../reducers/requestReducer";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import {Box} from "@mui/material";
+import {addHeaderToRequest, saveRequest, selectRequestById, updateRequest} from "../reducers/requestReducer";
 import HeaderInput from "./HeaderInput";
 import axios from "axios";
 import {selectUser} from "../reducers/userReducer";
@@ -20,10 +14,48 @@ const RequestDetail = () => {
 	const requestType = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 	const dispatch = useDispatch()
 
+	const parseCurl = str => {
+
+		const requestDetails = {}
+		let strs = str.split(' ')
+		strs.forEach(str => str.trim())
+		strs = strs.filter(str => str.length)
+		console.log(strs)
+		const requestIndex = strs.indexOf('--request')
+		if (requestIndex !== -1) {
+			requestDetails.type = strs[requestIndex + 1]
+		}
+		const bodyIndex = strs.indexOf('--data-raw')
+		if (bodyIndex !== -1) {
+			requestDetails.body = strs[bodyIndex + 1]
+		}
+		const urlIndex = strs.indexOf('--url')
+		if (urlIndex !== -1) {
+			requestDetails.url = strs[urlIndex + 1]
+		}
+		return requestDetails
+	}
+
 	function handleChange(key, value) {
 		const newRequest = {...request}
 		newRequest[key] = value
 		dispatch(updateRequest(newRequest))
+		if (key === 'body') {
+			console.log(parseCurl(value))
+		}
+	}
+
+	const exportToCurl = (request) => {
+		let headers = []
+		request.headers.forEach(header => {
+			if (header.key?.length && header.value?.length) {
+				headers.push(`-H "${header.key}: ${header.value}"`)
+			}
+		})
+		return `curl --request ${request.type} --url ${request.url} --data-raw '${request.body}' ${headers.join(' ')}`
+	}
+	const addNewHeader = () => {
+		dispatch(addHeaderToRequest(request.id, {key: '', value: '', checked: ''}, user))
 	}
 
 	async function sendRequest() {
@@ -35,7 +67,6 @@ const RequestDetail = () => {
 		}
 
 		dispatch(saveRequest(request, user))
-
 		let response = null
 		switch (request.type) {
 			case 'GET': {
@@ -62,7 +93,6 @@ const RequestDetail = () => {
 		}
 		response.headers = responseHeaders
 		setResponse(response)
-		console.log(response.headers)
 	}
 
 	if (!request) {
@@ -72,41 +102,40 @@ const RequestDetail = () => {
 	return (
 		<div className="flex flex-col justify-center items-center">
 			<div className="flex justify-around w-full mt-5">
-				<InputLabel id="type">Type</InputLabel>
-				<Select
-					labelId='type'
+				<label>Type</label>
+				<select
 					id='type'
 					value={request.type}
-					label='Type'
+
 					onChange={e => handleChange('type', e.target.value)}
 				>
-					{requestType.map(type => <MenuItem key={type} value={type}>{type}</MenuItem>)}
-				</Select>
+					{requestType.map(type => <option key={type} value={type}>{type}</option>)}
+				</select>
 
-				<TextField className="w-3/5 mt-5" id="url" label='URL' variant="outlined"
-				           value={request.url} onChange={e => handleChange('url', e.target.value)}/>
-				<Button className="mt-5" variant="contained" onClick={sendRequest}>Send</Button>
+				<input type="text" className="w-3/5 mt-5" id="url"
+				       value={request.url} onChange={e => handleChange('url', e.target.value)}/>
+				<button className="mt-5" onClick={sendRequest}>Send</button>
 			</div>
 			<div className="flex justify-around w-full">
-				<Button variant="contained">Add Header</Button>
-				<div>Headers</div>
-				<Button variant="contained">Delete Header</Button>
+				<button onClick={addNewHeader}>Add Header</button>
+				<button onClick={() => {
+					navigator.clipboard.writeText(exportToCurl(request)).then(r => console.log('success'))
+				}}>Export to cURL
+				</button>
 			</div>
-			<Box className="mt-5">
+			<ul className="mt-5">
 				{request.headers.map(header =>
-					<HeaderInput key={header.id} requestId={request.id} header={header}/>
+					<HeaderInput key={header.id} requestId={request.id} headerId={header.id}/>
 				)}
-
-			</Box>
-			<Box className="mt-5">
-				<TextField
-					label="Request Body"
+			</ul>
+			<div className="mt-5">
+				<input
+					type="text"
 					id='text-field'
 					value={request.body}
 					onChange={e => handleChange('body', e.target.value)}
-					multiline
-				></TextField>
-			</Box>
+				/>
+			</div>
 			{response &&
 				<>
 					<div className="mt-5">

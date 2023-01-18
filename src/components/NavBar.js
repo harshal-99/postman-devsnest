@@ -1,4 +1,3 @@
-import {AppBar, Box, Button, Container} from "@mui/material";
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -10,22 +9,22 @@ const NavBar = () => {
 	const dispatch = useDispatch()
 
 	return (
-		<AppBar position="static">
-			<Container maxWidth="x1">
-				<Box>
+		<div className="sticky">
+			<div className="w-full bg-black">
+				<div>
 					{user &&
-						<Button variant="outlined" style={{color: "white"}} color="error"
-						        onClick={() => dispatch(logoutUser())}>Logout</Button>
+						<button type="button" style={{color: "white"}} color="error"
+						        onClick={() => dispatch(logoutUser())}>Logout</button>
 					}
 					{!user &&
 						<>
-							<Button variant="outlined"><Link style={{color: 'white'}} to='/login'>Login</Link></Button>
-							<Button variant="outlined"><Link style={{color: 'white'}} to='/signup'>Signup</Link></Button>
+							<button className="mr-2.5"><Link style={{color: 'white'}} to='/login'>Login</Link></button>
+							<button><Link style={{color: 'white'}} to='/signup'>Signup</Link></button>
 						</>
 					}
-				</Box>
-			</Container>
-		</AppBar>
+				</div>
+			</div>
+		</div>
 	)
 }
 

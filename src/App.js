@@ -15,7 +15,7 @@ const App = () => {
 	}, [dispatch])
 
 	return (
-		<>
+		<div>
 			<NavBar/>
 			<div className="flex">
 				<Main/>
@@ -23,7 +23,7 @@ const App = () => {
 					<Outlet/>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
 

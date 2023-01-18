@@ -1,11 +1,11 @@
 import {useDispatch, useSelector} from "react-redux";
 import {deleteRequestById, selectRequestById} from "../reducers/requestReducer";
-import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
+import {Link, useNavigate} from "react-router-dom";
 import {selectUser} from "../reducers/userReducer";
 
 const RequestCard = ({requestId}) => {
 	const {user} = useSelector(selectUser)
+	const navigation = useNavigate()
 	const request = useSelector(state => selectRequestById(state, requestId))
 	const dispatch = useDispatch()
 	return (
@@ -13,7 +13,9 @@ const RequestCard = ({requestId}) => {
 			<div>{request.type}</div>
 			<div>{!request.url.length ? 'Enter url' : request.url}</div>
 			<Link to={`/request/${requestId}`}>Open</Link>
-			<Button variant="contained" onClick={() => dispatch(deleteRequestById(request.id, user))}>Delete</Button>
+			<button
+				onClick={() => dispatch(deleteRequestById(request.id, user, () => navigation('/', {replace: true})))}>Delete
+			</button>
 		</>
 	)
 }
