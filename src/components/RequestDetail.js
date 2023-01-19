@@ -9,7 +9,7 @@ import {selectUser} from "../reducers/userReducer";
 const RequestDetail = () => {
 	const {user} = useSelector(selectUser)
 	const {requestId} = useParams()
-	const request = useSelector(state => selectRequestById(state, requestId));
+	const request = useSelector(state => selectRequestById(state, Number(requestId)));
 	const [response, setResponse] = useState(null)
 	const requestType = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 	const dispatch = useDispatch()
@@ -40,9 +40,6 @@ const RequestDetail = () => {
 		const newRequest = {...request}
 		newRequest[key] = value
 		dispatch(updateRequest(newRequest))
-		if (key === 'body') {
-			console.log(parseCurl(value))
-		}
 	}
 
 	const exportToCurl = (request) => {
@@ -102,23 +99,23 @@ const RequestDetail = () => {
 	return (
 		<div className="flex flex-col justify-center items-center">
 			<div className="flex justify-around w-full mt-5">
-				<label>Type</label>
 				<select
 					id='type'
 					value={request.type}
-
+					className="border border-black"
 					onChange={e => handleChange('type', e.target.value)}
 				>
 					{requestType.map(type => <option key={type} value={type}>{type}</option>)}
 				</select>
 
-				<input type="text" className="w-3/5 mt-5" id="url"
+				<input type="text" className="w-3/5 mt-5 border border-black" id="url"
+				       placeholder="Enter Url"
 				       value={request.url} onChange={e => handleChange('url', e.target.value)}/>
-				<button className="mt-5" onClick={sendRequest}>Send</button>
+				<button className="mt-5 border border-black" onClick={sendRequest}>Send</button>
 			</div>
 			<div className="flex justify-around w-full">
-				<button onClick={addNewHeader}>Add Header</button>
-				<button onClick={() => {
+				<button className="border border-black" onClick={addNewHeader}>Add Header</button>
+				<button className="border border-black" onClick={() => {
 					navigator.clipboard.writeText(exportToCurl(request)).then(r => console.log('success'))
 				}}>Export to cURL
 				</button>
@@ -131,6 +128,8 @@ const RequestDetail = () => {
 			<div className="mt-5">
 				<input
 					type="text"
+					placeholder="Enter Body"
+					className="border border-black"
 					id='text-field'
 					value={request.body}
 					onChange={e => handleChange('body', e.target.value)}

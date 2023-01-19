@@ -10,10 +10,10 @@ const RequestCard = ({requestId}) => {
 	const dispatch = useDispatch()
 	return (
 		<>
-			<div>{request.type}</div>
-			<div>{!request.url.length ? 'Enter url' : request.url}</div>
-			<Link to={`/request/${requestId}`}>Open</Link>
-			<button
+			<div className="border border-black">{request.type}</div>
+			<div className="border border-black">{!request.url.length ? 'Enter url' : request.url}</div>
+			<Link className="border border-black" to={`/request/${requestId}`}>Open</Link>
+			<button className="border border-black"
 				onClick={() => dispatch(deleteRequestById(request.id, user, () => navigation('/', {replace: true})))}>Delete
 			</button>
 		</>

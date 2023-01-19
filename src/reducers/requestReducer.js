@@ -72,10 +72,17 @@ export const requestSlice = createSlice({
 				}
 			}
 		},
+		deleteHeader(state, action) {
+			const requestId = action.payload.requestId
+			const request = state.requests.find(request => request.id === requestId)
+			if (request) {
+				request.headers = request.headers.filter(header => header.id !== action.payload.headerId)
+			}
+		}
 	}
 })
 
-export const {setRequests, addNewRequest, updateRequest, deleteRequest, addHeader, updateHeader} = requestSlice.actions
+export const {setRequests, addNewRequest, updateRequest, deleteRequest, addHeader, updateHeader, deleteHeader} = requestSlice.actions
 
 export const selectRequests = (state) => state.request
 export const selectRequestIds = (state) => state.request.requestIds
@@ -134,24 +141,21 @@ export const deleteRequestById = (id, user, cb) => {
 export const addHeaderToRequest = (requestId, header, user) => {
 	return async (dispatch) => {
 		try {
-			const savedRequest = await requestService.addNewHeader(requestId, header, user)
-			dispatch(updateRequest(savedRequest))
+			const savedHeader = await requestService.addNewHeader(requestId, header, user)
+			dispatch(addHeader({header: savedHeader, requestId}))
 		} catch (e) {
 			console.log(e)
 		}
 	}
 }
 
-/*
-export const updateHeader = (requestId, header, user) => {
+export const deleteHeaderById = (requestId, headerId, user) => {
 	return async (dispatch) => {
 		try {
-			console.log(header)
-			const savedRequest = await requestService.updateHeader(requestId, header, user)
-			dispatch(updateRequest(savedRequest))
+			await requestService.deleteHeaderFromRequest(requestId, headerId, user)
+			dispatch(deleteHeader({requestId, headerId}))
 		} catch (e) {
 			console.log(e)
 		}
 	}
 }
-*/
